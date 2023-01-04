@@ -1,0 +1,23 @@
+version: '3'
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    restart: always
+    volumes:
+      - jenkins_home:/var/jenkins_home
+  artifactory-tlv:
+    image: docker.bintray.io/jfrog/artifactory-oss:latest
+    container_name: artifactory-tlv
+    ports:
+      - "8081:8081"
+      - "8082:8082"
+      - "443:443"
+    volumes:
+      - artifactory_home:/var/opt/jfrog/artifactory
+volumes:
+  jenkins_home:
+  artifactory_home:
