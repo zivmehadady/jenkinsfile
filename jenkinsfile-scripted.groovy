@@ -8,7 +8,7 @@ node {
         }
         stage('Publish') {
             if (currentBuild.currentResult == 'SUCCESS') {
-                def server = Artifactory.newServer url: 'http://10.101.0.137:8081/artifactory/', username: 'super-user', password: 'Qw12856!'
+                def server = Artifactory.newServer url: 'http://artifactory-tlv:8081/artifactory/', username: 'super-user', password: 'Qw12856!'
                 def uploadSpec = """{
                     "files": [
                     {
