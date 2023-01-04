@@ -39,11 +39,13 @@ pipeline {
     }
         stage('Report') {
             steps {
-                mail to: 'some@email.com', subject: "${currentBuild.currentResult}: ${env.JOB_NAME} #${env.BUILD_NUMBER}", body: '''
+                mail to: 'some@email.com', subject: "${currentBuild.currentResult}: ${env.JOB_NAME} #${env.BUILD_NUMBER}", body: """
                 <p>Job: ${env.JOB_NAME}</p>
                 <p>Build number: ${env.BUILD_NUMBER}</p>
                 <p>Status: ${currentBuild.currentResult}</p>
-                '''
+                """
+                
+        
             }
         }
         stage('Cleanup') {
