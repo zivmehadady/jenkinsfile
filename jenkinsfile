@@ -1,30 +1,42 @@
 pipeline {
-    agent {
-        docker {
-            image 'myimage'
-            privileged true
+    agent
+    
+    {
+        dockerfile {
+            filename 'Dockerfile'
+            dir '/home/system/mydocker/'
             label 'zip-job-docker'
+           args "-u root --network system_default -e 'VERSION=${env.VERSION}'"
         }
+
     }
+
     stages {
+
         stage('Build') {
             steps {
-                sh 'python /tmp/zip_job.py'
+                sh 'python3 /tmp/zip_job.py'
             }
+
         }
         stage('Publish') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'artifactory', passwordVariable: 'ARTIFACTORY_PASSWORD', usernameVariable: 'ARTIFACTORY_USERNAME')]) {
-                    sh '''
-                    set -e
-                    zip_files=$(find . -name "*.zip")
-                    for zip_file in $zip_files; do
-                        curl -u$ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD -X PUT "https://artifactory-tlv/binary-storage/${VERSION}/${zip_file}" -T "${zip_file}"
-                    done
-                    '''
-                }
-            }
+
+                 script {
+                    def server = Artifactory.newServer url: 'http://10.101.0.137:8081/artifactory/', username: 'super-user', password: 'Qw12856!'
+                    def uploadSpec = """{
+                    "files": [
+                    {
+                       "pattern": "*.zip",
+                        "target": "binary-storage/${env.VERSION}/"
+                    }
+                         ]
+                    }"""
+           
+          server.upload spec: uploadSpec, failNoOp: true
         }
+      }
+    }
         stage('Report') {
             steps {
                 mail to: 'some@email.com', subject: "${currentBuild.currentResult}: ${env.JOB_NAME} #${env.BUILD_NUMBER}", body: '''
