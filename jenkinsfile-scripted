@@ -9,7 +9,7 @@ node {
             sh 'python3 /tmp/zip_job.py'
         }
         stage('Publish') {
-               {
+               
                 def server =  Artifactory.newServer url: 'http://artifactory-tlv:8081/artifactory/', credentialsId: 'artifactory'
                 def uploadSpec = """{
                     "files": [
@@ -20,7 +20,7 @@ node {
                          ]
                     }"""
                  server.upload spec: uploadSpec, failNoOp: true
-            }
+            
         }
         stage('Report') {
             emailext body: "The Jenkins job ${env.JOB_NAME} has completed with status ${currentBuild.currentResult}",
