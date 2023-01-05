@@ -10,7 +10,7 @@ node {
         }
         stage('Publish') {
             if (currentBuild.currentResult == 'SUCCESS') {
-                def server = Artifactory.Server 'artifactory'
+                def server = Artifactory.Server 'artifactory-tlv'
                 def uploadSpec = """{
                     "files": [
                     {
