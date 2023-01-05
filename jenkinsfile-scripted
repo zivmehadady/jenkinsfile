@@ -9,13 +9,13 @@ node {
             sh 'python3 /tmp/zip_job.py'
         }
         stage('Publish') {
-            if (currentBuild.currentResult == 'SUCCESS') {
-                def server = Artifactory.Server 'artifactory-tlv'
+               {
+                def server =  Artifactory.newServer url: 'http://artifactory-tlv:8081/artifactory/', credentialsId: 'artifactory'
                 def uploadSpec = """{
                     "files": [
                     {
                        "pattern": "*.zip",
-                        "target": "binary-storage/${VERSION}/"
+                        "target": "binary-storage/${env.VERSION}/"
                     }
                          ]
                     }"""
