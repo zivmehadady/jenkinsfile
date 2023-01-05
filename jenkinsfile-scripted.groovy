@@ -1,7 +1,9 @@
 node {
+        checkout scmGit(
+    branches: [[name: 'master']],
+    userRemoteConfigs: [[url: 'https://github.com/zivmehadady/jenkinsfile.git']])
 
-
-        def testImage = docker.build("zip-job-docker", "/home/system/mydocker")
+        def testImage = docker.build("zip-job-docker", "./mydocker")
         testImage.inside("--privileged --label zip-job-docker --network system_default -e 'VERSION=${env.VERSION}'") {
         stage('Build') {
             sh 'python3 /tmp/zip_job.py'
