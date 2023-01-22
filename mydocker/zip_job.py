@@ -5,7 +5,7 @@ import zipfile
 arr = ['a', 'b', 'c', 'd']
 
 # Get the value of the VERSION environment variable
-version = os.environ.get('VERSION', '1.0.0')
+version = os.environ.get('VERSION', '1.2.0')
 
 # Create the text files & Check that all the text files have been created
 for elem in arr:
